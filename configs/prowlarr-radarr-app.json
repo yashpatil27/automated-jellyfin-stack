@@ -1,0 +1,16 @@
+{
+  "name": "Radarr",
+  "implementation": "Radarr",
+  "configContract": "RadarrSettings",
+  "fields": [
+    {
+      "name": "baseUrl",
+      "value": "http://radarr:7878"
+    },
+    {
+      "name": "apiKey",
+      "value": "RADARR_API_KEY"
+    }
+  ],
+  "tags": []
+}

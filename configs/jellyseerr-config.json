@@ -1,0 +1,55 @@
+{
+  "main": {
+    "applicationTitle": "Jellyseerr",
+    "applicationUrl": "http://localhost:5055",
+    "trustProxy": false,
+    "csrfProtection": false,
+    "cacheImages": false,
+    "defaultPermissions": 2
+  },
+  "jellyfin": {
+    "name": "Jellyfin",
+    "hostname": "jellyfin",
+    "port": 8096,
+    "urlBase": "",
+    "ssl": false,
+    "serverId": "",
+    "externalUrl": ""
+  },
+  "sonarr": [
+    {
+      "name": "Sonarr",
+      "hostname": "sonarr",
+      "port": 8989,
+      "apiKey": "SONARR_API_KEY_PLACEHOLDER",
+      "useSsl": false,
+      "baseUrl": "",
+      "activeProfileId": 1,
+      "activeDirectory": "/tv",
+      "activeLanguageProfileId": 1,
+      "is4k": false,
+      "enableSeasonFolders": true,
+      "externalUrl": ""
+    }
+  ],
+  "radarr": [
+    {
+      "name": "Radarr",
+      "hostname": "radarr",
+      "port": 7878,
+      "apiKey": "RADARR_API_KEY_PLACEHOLDER",
+      "useSsl": false,
+      "baseUrl": "",
+      "activeProfileId": 1,
+      "activeDirectory": "/movies",
+      "is4k": false,
+      "externalUrl": ""
+    }
+  ],
+  "tmdb": {
+    "apiKey": "TMDB_API_KEY_PLACEHOLDER"
+  },
+  "omdb": {
+    "apiKey": ""
+  }
+}

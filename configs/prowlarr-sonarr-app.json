@@ -1,0 +1,16 @@
+{
+  "name": "Sonarr",
+  "implementation": "Sonarr",
+  "configContract": "SonarrSettings",
+  "fields": [
+    {
+      "name": "baseUrl",
+      "value": "http://sonarr:8989"
+    },
+    {
+      "name": "apiKey",
+      "value": "SONARR_API_KEY"
+    }
+  ],
+  "tags": []
+}

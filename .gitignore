@@ -1,0 +1,46 @@
+# Configuration data (contains API keys and personal settings)
+*/config/
+*/config.xml
+*/settings.json
+*/data/
+*/logs/
+*/cache/
+
+# Media files
+media/movies/*
+media/tv/*
+!media/movies/.gitkeep
+!media/tv/.gitkeep
+
+# Downloads
+downloads/*
+!downloads/.gitkeep
+
+# Backups
+*.tar.gz
+*.zip
+backup-*
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+
+# Environment files
+.env
+.env.local
+
+# Temporary files
+*.tmp
+*.temp

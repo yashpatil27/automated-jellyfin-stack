@@ -1,0 +1,34 @@
+[
+  {
+    "name": "1337x",
+    "implementation": "Torznab",
+    "configContract": "TorznabSettings",
+    "fields": [
+      {
+        "name": "baseUrl",
+        "value": "https://1337x.to/"
+      },
+      {
+        "name": "apiPath",
+        "value": "/api"
+      }
+    ],
+    "tags": []
+  },
+  {
+    "name": "The Pirate Bay",
+    "implementation": "Torznab",
+    "configContract": "TorznabSettings", 
+    "fields": [
+      {
+        "name": "baseUrl",
+        "value": "https://thepiratebay.org/"
+      },
+      {
+        "name": "apiPath",
+        "value": "/api"
+      }
+    ],
+    "tags": []
+  }
+]

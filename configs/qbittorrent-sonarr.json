@@ -1,0 +1,20 @@
+{
+  "name": "qBittorrent",
+  "implementation": "QBittorrent",
+  "configContract": "QBittorrentSettings",
+  "fields": [
+    {
+      "name": "host",
+      "value": "mullvad-vpn"
+    },
+    {
+      "name": "port",
+      "value": 8085
+    },
+    {
+      "name": "category",
+      "value": "sonarr"
+    }
+  ],
+  "tags": []
+}
