@@ -341,6 +341,21 @@ gather_user_inputs() {
     fi
     
     echo -n "Enter your group ID for file permissions (default: $current_gid): "
+
+    # Theme preference
+    echo ""
+    echo -e "${WHITE}🎨 Jellyfin Theme Configuration${NC}"
+    echo "Apply the beautiful Zesty Cyan theme to Jellyfin?"
+    echo "This gives Jellyfin a modern cyan color scheme with custom backgrounds."
+    echo -n "Apply Zesty Cyan theme? (Y/n): "
+    read APPLY_THEME
+    if [[ "$APPLY_THEME" =~ ^[Nn]$ ]]; then
+        APPLY_THEME="false"
+        echo "Skipping theme - Jellyfin will use default appearance"
+    else
+        APPLY_THEME="true"
+        echo "Zesty Cyan theme will be applied!"
+    fi
     read GROUP_ID
     if [ -z "$GROUP_ID" ]; then
         GROUP_ID=$current_gid
@@ -466,6 +481,7 @@ wait_for_all_services() {
 # Function to run post-setup configuration
     configure_metadata_sources
 run_post_setup() {
+    apply_jellyfin_theme
     print_step "Running post-setup configuration..."
     
     # Check if Python configuration script exists
@@ -505,6 +521,10 @@ display_final_info() {
     echo -e "   2️⃣  Configure ${CYAN}Jellyseerr${NC} ($JELLYSEERR_URL)"
     echo -e "   3️⃣  Set up ${CYAN}Jellyfin${NC} libraries ($JELLYFIN_URL)"
     echo -e "   4️⃣  Test by requesting content through ${CYAN}Jellyseerr${NC}"
+
+    if [ "$APPLY_THEME" = "true" ]; then
+        echo -e "   5️⃣  Enjoy the ${CYAN}Zesty Cyan theme${NC} in Jellyfin!"
+    fi
     echo ""
     echo -e "${WHITE}📖 Documentation:${NC}"
     echo -e "   • See ${CYAN}INSTALL.md${NC} for detailed setup instructions"
@@ -548,6 +568,7 @@ main() {
     wait_for_all_services
     configure_metadata_sources
     run_post_setup
+    apply_jellyfin_theme
     display_final_info
 }
 
@@ -575,4 +596,33 @@ configure_metadata_sources() {
     fi
     
     print_success "Metadata sources configured!"
+}
+
+# Function to apply Jellyfin theme
+apply_jellyfin_theme() {
+    if [ "$APPLY_THEME" = "true" ]; then
+        print_step "Applying Zesty Cyan theme to Jellyfin..."
+        
+        # Wait for Jellyfin to be fully ready
+        sleep 30
+        
+        # Copy theme to Jellyfin container
+        if docker ps | grep -q jellyfin; then
+            docker cp "$SCRIPT_DIR/themes/jellyfin/zesty-cyan-theme.css" jellyfin:/config/custom.css
+            
+            # Restart Jellyfin to apply theme
+            print_status "Restarting Jellyfin to apply theme..."
+            docker-compose restart jellyfin
+            
+            # Wait for restart
+            sleep 15
+            wait_for_service "$JELLYFIN_URL" "Jellyfin"
+            
+            print_success "Zesty Cyan theme applied to Jellyfin!"
+        else
+            print_warning "Jellyfin container not found - theme not applied"
+        fi
+    else
+        print_status "Skipping theme application - using default Jellyfin appearance"
+    fi
 }
