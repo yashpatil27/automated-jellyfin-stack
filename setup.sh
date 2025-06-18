@@ -309,7 +309,69 @@ gather_user_inputs() {
     
     # Mullvad VPN account
     echo -e "${WHITE}🔐 VPN Configuration${NC}"
-    echo "You need a Mullvad VPN account to secure your torrent traffic."
+    echo "Choose your VPN provider for secure torrenting:"
+    echo ""
+    echo "1) Mullvad (Recommended - Privacy focused)"
+    echo "2) NordVPN (Popular choice)"
+    echo "3) ExpressVPN (Fast speeds)"
+    echo "4) Surfshark (Good value)"
+    echo "5) ProtonVPN (Security focused)"
+    echo ""
+    echo -n "Select VPN provider (1-5, default: 1): "
+    read VPN_CHOICE
+    
+    case $VPN_CHOICE in
+        2)
+            VPN_PROVIDER="nordvpn"
+            VPN_PROVIDER_NAME="NordVPN"
+            ;;
+        3)
+            VPN_PROVIDER="expressvpn"
+            VPN_PROVIDER_NAME="ExpressVPN"
+            ;;
+        4)
+            VPN_PROVIDER="surfshark"
+            VPN_PROVIDER_NAME="Surfshark"
+            ;;
+        5)
+            VPN_PROVIDER="protonvpn"
+            VPN_PROVIDER_NAME="ProtonVPN"
+            ;;
+        *)
+            VPN_PROVIDER="mullvad"
+            VPN_PROVIDER_NAME="Mullvad"
+            ;;
+    esac
+    
+    echo "Selected: $VPN_PROVIDER_NAME"
+    echo ""
+    
+    echo -n "Enter your $VPN_PROVIDER_NAME username/account: "
+    read VPN_USERNAME
+    if [ -z "$VPN_USERNAME" ]; then
+        print_error "$VPN_PROVIDER_NAME credentials are required"
+        exit 1
+    fi
+    
+    if [ "$VPN_PROVIDER" != "mullvad" ]; then
+        echo -n "Enter your $VPN_PROVIDER_NAME password: "
+        read -s VPN_PASSWORD
+        echo ""
+        if [ -z "$VPN_PASSWORD" ]; then
+            print_error "$VPN_PROVIDER_NAME password is required"
+            exit 1
+        fi
+    else
+        VPN_PASSWORD="m"  # Mullvad uses "m" as password
+    fi
+    
+    echo -n "Enter preferred country (default: Netherlands): "
+    read VPN_COUNTRY
+    if [ -z "$VPN_COUNTRY" ]; then
+        VPN_COUNTRY="Netherlands"
+    fi
+    
+    print_success "$VPN_PROVIDER_NAME configuration collected!"
     echo "Get one at: ${CYAN}https://mullvad.net${NC}"
     echo ""
     while [ -z "$MULLVAD_ACCOUNT" ]; do
@@ -374,14 +436,13 @@ create_docker_compose() {
         exit 1
     fi
     
-    # Replace placeholders in template
-    sed "s/YOUR_MULLVAD_ACCOUNT_NUMBER_HERE/$MULLVAD_ACCOUNT/g; \
-         s/TZ=UTC/TZ=$TIMEZONE/g; \
-         s/PUID=1000/PUID=$USER_ID/g; \
-         s/PGID=1000/PGID=$GROUP_ID/g" \
-         "$SCRIPT_DIR/docker-compose.template.yml" > "$SCRIPT_DIR/docker-compose.yml"
+    # Source the docker-compose creation function
+    source "$SCRIPT_DIR/create-docker-compose.sh"
     
-    print_success "Docker Compose configuration created!"
+    # Create docker-compose.yml with VPN configuration
+    create_docker_compose_with_vpn "$VPN_PROVIDER" "$VPN_USERNAME" "$VPN_PASSWORD" "$VPN_COUNTRY" "$TIMEZONE" "$USER_ID" "$GROUP_ID"
+    
+    print_success "Docker Compose configuration created with $VPN_PROVIDER_NAME!"
 }
 
 # Function to set up directory structure
@@ -512,6 +573,7 @@ display_final_info() {
     echo -e "   📝 ${CYAN}Jellyseerr (requests):${NC}    $JELLYSEERR_URL"
     echo -e "   🔍 ${CYAN}Prowlarr (indexers):${NC}      $PROWLARR_URL"
     echo -e "   📺 ${CYAN}Sonarr (TV shows):${NC}        $SONARR_URL"
+    echo -e "   🔒 ${CYAN}VPN ($VPN_PROVIDER_NAME):${NC}         Securing torrent traffic"
     echo -e "   🎥 ${CYAN}Radarr (movies):${NC}          $RADARR_URL"
     echo -e "   📦 ${CYAN}qBittorrent (torrents):${NC}   $QBITTORRENT_URL"
     echo -e "   💬 ${CYAN}Bazarr (subtitles):${NC}       $BAZARR_URL"

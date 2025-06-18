@@ -1,0 +1,19 @@
+  vpn-service:
+    image: qmcgaw/gluetun:latest
+    container_name: vpn-service
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=openvpn
+      - OPENVPN_USER=VPN_USERNAME_PLACEHOLDER
+      - OPENVPN_PASSWORD=m
+      - SERVER_COUNTRIES=VPN_COUNTRY_PLACEHOLDER
+      - UPDATER_PERIOD=24h
+    ports:
+      - "8085:8085"  # qBittorrent
+      - "6881:6881"  # qBittorrent torrent port
+      - "6881:6881/udp"
+    restart: unless-stopped
+    networks:
+      - vpn-network

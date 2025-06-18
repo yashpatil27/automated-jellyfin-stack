@@ -20,7 +20,7 @@ That's it! The script will:
 ## 📋 What You Need
 
 - **Linux system** (Ubuntu, Debian, CentOS, Fedora, Arch, etc.)
-- **Mullvad VPN account** (get one at [mullvad.net](https://mullvad.net))
+- **VPN account** (Mullvad, NordVPN, ExpressVPN, Surfshark, or ProtonVPN) (get one at [mullvad.net](https://mullvad.net))
 - **5 minutes** of your time
 
 **That's it!** Docker and all dependencies are installed automatically.
